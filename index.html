@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoomSplit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">ROOM EXPENSES</p>
+      <h1>RoomSplit</h1>
+    </div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+  </header>
+
+  <main>
+    <section id="dashboard" class="page active">
+      <div class="month-row">
+        <button class="month-arrow" id="prevMonth">‹</button>
+        <div>
+          <p class="muted">Monthly overview</p>
+          <h2 id="monthTitle"></h2>
+        </div>
+        <button class="month-arrow" id="nextMonth">›</button>
+      </div>
+
+      <div class="hero-card">
+        <p>Total household expenses</p>
+        <strong id="totalMonth">₹0</strong>
+        <span id="expenseCount">0 expenses</span>
+      </div>
+
+      <div class="section-heading">
+        <h3>Roommate balances</h3>
+      </div>
+      <div id="balanceCards" class="balance-grid"></div>
+
+      <div class="settlement-card">
+        <div class="section-heading">
+          <h3>End-of-month result</h3>
+        </div>
+        <div id="settlementList"></div>
+        <p class="hint">Use these amounts to settle among yourselves. RoomSplit does not track payments.</p>
+      </div>
+
+      <div class="section-heading">
+        <h3>Recent expenses</h3>
+        <button class="text-btn" data-page="expenses">View all</button>
+      </div>
+      <div id="recentExpenses"></div>
+    </section>
+
+    <section id="add" class="page">
+      <div class="page-title">
+        <p class="eyebrow">NEW ENTRY</p>
+        <h2>Add expense</h2>
+        <p>Enter the day's expenses in a few seconds.</p>
+      </div>
+
+      <form id="expenseForm" class="card form-card">
+        <label>Amount
+          <div class="amount-input"><span>₹</span><input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
+        </label>
+
+        <label>Description
+          <input id="description" type="text" maxlength="60" placeholder="e.g. Milk, Ice cream, Electricity" required>
+        </label>
+
+        <label>Category
+          <select id="category">
+            <option>Groceries</option>
+            <option>Food</option>
+            <option>Rent</option>
+            <option>Electricity</option>
+            <option>Wi-Fi</option>
+            <option>Transport</option>
+            <option>Household</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <label>Date
+          <input id="expenseDate" type="date" required>
+        </label>
+
+        <label>Paid by
+          <select id="paidBy"></select>
+        </label>
+
+        <div>
+          <div class="label-row">
+            <span class="label">Expense type</span>
+          </div>
+          <div class="type-toggle">
+            <label class="type-option"><input type="radio" name="expenseType" value="common" checked><span>Common</span></label>
+            <label class="type-option"><input type="radio" name="expenseType" value="shared"><span>Shared by selected people</span></label>
+          </div>
+        </div>
+
+        <div>
+          <div class="label-row">
+            <span class="label">Shared by</span>
+            <button type="button" class="text-btn" id="selectAll">Select all</button>
+          </div>
+          <div id="participants" class="people-picker"></div>
+          <p class="hint" id="participantHint">Common expense: everyone shares it.</p>
+        </div>
+
+        <button class="primary-btn" type="submit">Add expense</button>
+      </form>
+    </section>
+
+    <section id="expenses" class="page">
+      <div class="page-title">
+        <p class="eyebrow">TRANSACTIONS</p>
+        <h2>Expenses</h2>
+      </div>
+      <div class="filters">
+        <input id="expenseSearch" type="search" placeholder="Search expenses…">
+        <select id="categoryFilter"><option value="all">All categories</option></select>
+      </div>
+      <div id="expenseList"></div>
+    </section>
+
+    <section id="summary" class="page">
+      <div class="month-row">
+        <button class="month-arrow" id="prevMonthSummary">‹</button>
+        <div><p class="muted">Summary</p><h2 id="summaryMonthTitle"></h2></div>
+        <button class="month-arrow" id="nextMonthSummary">›</button>
+      </div>
+      <div class="hero-card">
+        <p>Total spent</p>
+        <strong id="summaryTotal">₹0</strong>
+      </div>
+      <div class="card">
+        <div class="section-heading"><h3>By category</h3></div>
+        <div id="categorySummary"></div>
+      </div>
+      <div class="card">
+        <div class="section-heading"><h3>Person-by-person</h3></div>
+        <div id="personSummary"></div>
+      </div>
+    </section>
+
+    <section id="settings" class="page">
+      <div class="page-title">
+        <p class="eyebrow">YOUR ROOM</p>
+        <h2>Settings</h2>
+        <p>Set the roommates and common expenses once.</p>
+      </div>
+      <div class="card">
+        <h3>Roommates</h3>
+        <div id="roommatesSettings"></div>
+        <button class="secondary-btn" id="addRoommate">+ Add roommate</button>
+      </div>
+      <div class="card">
+        <h3>Common expenses</h3>
+        <p class="hint">These are automatically shared by everyone. Being away does not change them.</p>
+        <div id="commonSettings"></div>
+      </div>
+      <div class="card">
+        <h3>Data</h3>
+        <p class="hint">Your data is stored locally in this browser.</p>
+        <div class="button-row">
+          <button class="secondary-btn" id="exportData">Export backup</button>
+          <label class="secondary-btn file-btn">Import backup<input id="importData" type="file" accept=".json"></label>
+        </div>
+        <button class="danger-btn" id="clearData">Clear all data</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="dashboard"><span>⌂</span><small>Home</small></button>
+    <button class="nav-item" data-page="add"><span>＋</span><small>Add</small></button>
+    <button class="nav-item" data-page="expenses"><span>☷</span><small>Expenses</small></button>
+    <button class="nav-item" data-page="summary"><span>◔</span><small>Summary</small></button>
+  </nav>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
